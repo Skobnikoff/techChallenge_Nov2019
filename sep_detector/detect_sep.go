@@ -9,10 +9,10 @@ import (
 )
 
 // ASSUMPTIONS:
-// - each line of the input file contains the same number of fields, thus separator symbols
+// - each line of the input file contains the same number of fields, thus the same number of separator symbols
 // - portions of text wrapped in quotation marks and brakets are considered as such
 //   that do not contain the separator inside
-// - only punctuation and space related symbols are considered as valid separators,
+// - only punctuation symbols and tabs are considered as valid separators,
 // 	 alphanumerical separators are not allowed
 // - only double quote `"` is considered as a valid quotation mark
 
@@ -21,6 +21,7 @@ import (
 var NbLn int = 20
 
 func main() {
+	// read input file
 	srcName := os.Args[1]
 	file, err := os.Open(srcName)
 	if err != nil {
@@ -45,17 +46,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// get rid of text
-	// remove letters, digits, math symbols, currency signs, dingbats, box-drawing characters, etc
-	// reg, err := regexp.Compile("[\\pL\\pN\\pS]")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// for i, v := range fstNLines {
-	// 	fstNLines[i] = reg.ReplaceAllString(v, "")
-	// }
-
 	// remove text in quotes and brakets
 	regQuote := regexp.MustCompile(`"[^"\r\n]*"`)
 	regBraket1 := regexp.MustCompile(`\([^\r\n]*\)`)
@@ -73,14 +63,12 @@ func main() {
 	var punctuation [][]string
 	reg := regexp.MustCompile("[\t!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~]")
 	for _, v := range fstNLines {
-		// fmt.Println(fstNLines)
 		punctuation = append(punctuation, reg.FindAllString(v, -1))
 	}
-	fmt.Println(punctuation)
 
 	// count character frequencies
-	var charCountPerLine []map[string]int
-	lineCountPerChar := make(map[string]int)
+	var charCountPerLine []map[string]int    // nb of char occurences in each line
+	lineCountPerChar := make(map[string]int) // nb of char occurences across all the lines
 	for _, chars := range punctuation {
 		charCount := make(map[string]int)
 		for _, v := range chars {
@@ -92,22 +80,15 @@ func main() {
 		charCountPerLine = append(charCountPerLine, charCount)
 	}
 
-	fmt.Println(lineCountPerChar)
 	potentSep := make(map[string]int)
 	for char := range lineCountPerChar {
-
 		if lineCountPerChar[char] == len(fstNLines) {
-			// fmt.Println("lineCountPerChar[char] == len(fstNLines)")
 			potentSep[char] = 0
 		}
 	}
 
-	fmt.Println("--------------")
-
 	for _, line := range charCountPerLine {
-		fmt.Println(line, potentSep)
 		for char := range line {
-
 			_, present := potentSep[char]
 			if present {
 				if potentSep[char] == 0 {
@@ -118,8 +99,6 @@ func main() {
 			}
 		}
 	}
-	fmt.Println("--------------")
-	fmt.Println(potentSep)
 
 	var fileSep string
 	for char := range potentSep {
