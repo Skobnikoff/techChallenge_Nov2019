@@ -15,6 +15,7 @@ import (
 // - only punctuation symbols and tabs are considered as valid separators,
 // 	 alphanumerical separators are not allowed
 // - only double quote `"` is considered as a valid quotation mark
+// - files which EOL is not "\n" can still be handled but there are risks of bugs
 
 // NbLn is a number of lines to be read in the beggining of the input file
 // 20 is big enough to be confident that there is no multiple characters competing for the "Delimeter status"
@@ -29,21 +30,25 @@ func main() {
 	}
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
-	var fstNLines []string
+	reader := bufio.NewReader(file)
 
-	n := 0
-	for scanner.Scan() {
+	var (
+		fstNLines []string
+		line      string
+		n         int
+	)
+	for {
 		n++
-		line := scanner.Text()
+		line, err = reader.ReadString('\n')
+
 		fstNLines = append(fstNLines, line)
 		if n == NbLn {
 			break
 		}
-	}
 
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		if err != nil {
+			break
+		}
 	}
 
 	// remove text in quotes and brakets
@@ -65,7 +70,6 @@ func main() {
 	for _, v := range fstNLines {
 		punctuation = append(punctuation, reg.FindAllString(v, -1))
 	}
-	// fmt.Println(punctuation)
 
 	// count character frequencies
 	var charCountPerLine []map[string]int    // nb of char occurences in each line
@@ -81,7 +85,6 @@ func main() {
 		charCountPerLine = append(charCountPerLine, charCount)
 	}
 
-	fmt.Println("\nlineCountPerChar: ", lineCountPerChar)
 	potentSep := make(map[string]int)
 	for char := range lineCountPerChar {
 		// potential separator should appear at least in 90% of lines of the input file
@@ -89,7 +92,6 @@ func main() {
 			potentSep[char] = 0
 		}
 	}
-	fmt.Println("\npotentSep", potentSep)
 
 	if len(potentSep) > 1 {
 		for _, line := range charCountPerLine {
@@ -107,7 +109,6 @@ func main() {
 				}
 			}
 		}
-		fmt.Println("\npotentSep filtered", potentSep)
 
 		var fileSep string
 		for char := range potentSep {
@@ -117,7 +118,6 @@ func main() {
 				fileSep = char
 			}
 		}
-		fmt.Printf(fileSep)
 
 		fmt.Printf("The input file has `%s` as a separator (high confidence).\n", fileSep)
 
