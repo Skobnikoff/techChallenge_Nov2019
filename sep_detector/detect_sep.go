@@ -68,7 +68,11 @@ func main() {
 	var punctuation [][]string
 	reg := regexp.MustCompile("[\t!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~]")
 	for _, v := range fstNLines {
-		punctuation = append(punctuation, reg.FindAllString(v, -1))
+		thisPunctuation := reg.FindAllString(v, -1)
+		if len(thisPunctuation) > 0 {
+			punctuation = append(punctuation, thisPunctuation)
+		}
+
 	}
 
 	// count character frequencies
@@ -84,11 +88,10 @@ func main() {
 		}
 		charCountPerLine = append(charCountPerLine, charCount)
 	}
-
 	potentSep := make(map[string]int)
 	for char := range lineCountPerChar {
 		// potential separator should appear at least in 90% of lines of the input file
-		if float64(lineCountPerChar[char]) >= float64(len(fstNLines))*0.9 {
+		if float64(lineCountPerChar[char]) >= float64(len(punctuation))*0.9 {
 			potentSep[char] = 0
 		}
 	}
@@ -101,9 +104,6 @@ func main() {
 					if potentSep[char] == 0 {
 						potentSep[char] = line[char]
 					} else if potentSep[char] != line[char] {
-						fmt.Println("\npotentSep[char] != line[char] : ", potentSep[char], line[char])
-						fmt.Println("line: ", line)
-
 						delete(potentSep, char)
 					}
 				}
@@ -131,5 +131,4 @@ func main() {
 	} else {
 		fmt.Printf("The input file separator was not identified.\n")
 	}
-
 }
