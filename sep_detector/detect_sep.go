@@ -65,6 +65,7 @@ func main() {
 	for _, v := range fstNLines {
 		punctuation = append(punctuation, reg.FindAllString(v, -1))
 	}
+	// fmt.Println(punctuation)
 
 	// count character frequencies
 	var charCountPerLine []map[string]int    // nb of char occurences in each line
@@ -80,35 +81,55 @@ func main() {
 		charCountPerLine = append(charCountPerLine, charCount)
 	}
 
+	fmt.Println("\nlineCountPerChar: ", lineCountPerChar)
 	potentSep := make(map[string]int)
 	for char := range lineCountPerChar {
-		if lineCountPerChar[char] == len(fstNLines) {
+		// potential separator should appear at least in 90% of lines of the input file
+		if float64(lineCountPerChar[char]) >= float64(len(fstNLines))*0.9 {
 			potentSep[char] = 0
 		}
 	}
+	fmt.Println("\npotentSep", potentSep)
 
-	for _, line := range charCountPerLine {
-		for char := range line {
-			_, present := potentSep[char]
-			if present {
-				if potentSep[char] == 0 {
-					potentSep[char] = line[char]
-				} else if potentSep[char] != line[char] {
-					delete(potentSep, char)
+	if len(potentSep) > 1 {
+		for _, line := range charCountPerLine {
+			for char := range line {
+				_, present := potentSep[char]
+				if present {
+					if potentSep[char] == 0 {
+						potentSep[char] = line[char]
+					} else if potentSep[char] != line[char] {
+						fmt.Println("\npotentSep[char] != line[char] : ", potentSep[char], line[char])
+						fmt.Println("line: ", line)
+
+						delete(potentSep, char)
+					}
 				}
 			}
 		}
-	}
+		fmt.Println("\npotentSep filtered", potentSep)
 
-	var fileSep string
-	for char := range potentSep {
-		if fileSep == "" {
-			fileSep = char
-		} else if potentSep[char] > potentSep[fileSep] {
-			fileSep = char
+		var fileSep string
+		for char := range potentSep {
+			if fileSep == "" {
+				fileSep = char
+			} else if potentSep[char] > potentSep[fileSep] {
+				fileSep = char
+			}
 		}
-	}
+		fmt.Printf(fileSep)
 
-	fmt.Printf("The input file has `%s` as a separator.\n", fileSep)
+		fmt.Printf("The input file has `%s` as a separator (high confidence).\n", fileSep)
+
+	} else if len(potentSep) == 1 {
+		var fileSep string
+		for fileSep = range potentSep {
+			break
+		}
+		fmt.Printf("The input file has `%s` as a separator (high confidence).\n", fileSep)
+
+	} else {
+		fmt.Printf("The input file separator was not identified.\n")
+	}
 
 }
