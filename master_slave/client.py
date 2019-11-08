@@ -10,9 +10,21 @@ socket = context.socket(zmq.REQ)
 socket.connect("tcp://localhost:5555")
 
 #  send request to master
-message = b"Hello"
-print("Send request: %s" % message)
-socket.send(message)
+matrix_1 = [
+    [1, 2, 3],
+    [4, 5, 6]
+]
+
+matrix_2 = [
+    [7, 8],
+    [9, 10],
+    [11, 12]
+]
+
+input_data = {'matrix_1': matrix_1, 'matrix_2': matrix_2}
+
+print("Send request: %s" % input_data)
+socket.send_json(input_data)
 
 time.sleep(1)
 

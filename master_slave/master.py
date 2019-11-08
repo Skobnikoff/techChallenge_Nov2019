@@ -1,6 +1,16 @@
 import time
 import zmq
 
+
+def partition_work(matrix_1, matrix_2):
+    tasks = {}
+    for row_index, row_matrix_1 in enumerate(matrix_1):
+        for col_index, col_matrix_2 in enumerate(matrix_2):
+            task = {"data": (row_matrix_1, col_matrix_2), "indexes": (row_index, col_index), "status": "todo"}
+            tasks['{}_{}'.format(*task["indexes"])] = task
+    return tasks
+
+
 context = zmq.Context()
 
 # socket communicating with clients
@@ -15,24 +25,27 @@ sender.bind("tcp://*:5556")
 receiver = context.socket(zmq.PULL)
 receiver.bind("tcp://*:5557")
 
-print("Waiting for a request from client...")
 while True:
     #  wait for client request
-    message = server.recv()
-    print("Received request: %s" % message)
+    print("Waiting for a request from client...")
+
+    client_input_data = server.recv_json()
+    print("Received request: %s" % client_input_data)
 
     #  partition work
-    # TODO
+    tasks = partition_work(client_input_data["matrix_1"], client_input_data["matrix_2"])
 
     # send tasks to slaves
-    for i in range(5):
-        print("Send to slave task #{}".format(str(i)))
-        sender.send_string(u"Task from master #{}".format(str(i)))
+    for task_id, task in tasks.items():
+        print("Send to slave task: {}".format(task_id))
+        sender.send_json(task)
+        task['status'] = 'sent'
 
     # wait for responses from slaves
-    for i in range(5):
-        slave_response = receiver.recv_string()
+    for index in range(len(tasks.keys())):
+        slave_response = receiver.recv_json()
         print("Response from slave: {}".format(slave_response))
+
     # assemble results
     # TODO
 

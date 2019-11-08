@@ -12,15 +12,16 @@ receiver.connect("tcp://localhost:5556")
 sender = context.socket(zmq.PUSH)
 sender.connect("tcp://localhost:5557")
 
-print("Waiting for work from master...")
 while True:
-    s = receiver.recv()
+    print("Waiting for work from master...")
+    task = receiver.recv_json()
 
-    # Simple progress indicator for the viewer
-    print("Received request: %s" % str(s))
+    print("Received request: %s" % task)
 
     # Do the work
+    task["result"] = "good"
     time.sleep(1)
 
     # Send results to sink
-    sender.send_string('Processed task #{}'.format(str(s)))
+    print("Send response to master: %s" % task)
+    sender.send_json(task)
