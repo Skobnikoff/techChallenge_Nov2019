@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # socket pushing work to slaves
     sender = context.socket(zmq.PUSH)
-    sender.bind("tcp://*:5556")
+    sender.connect("tcp://localhost:5556")
 
     # socket receiving results from slaves
     receiver = context.socket(zmq.PULL)
