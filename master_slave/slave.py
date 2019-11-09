@@ -2,26 +2,29 @@
 import time
 import zmq
 
-context = zmq.Context()
 
-# Socket to receive messages on
-receiver = context.socket(zmq.PULL)
-receiver.connect("tcp://localhost:5556")
+if __name__ == '__main__':
 
-# Socket to send messages to
-sender = context.socket(zmq.PUSH)
-sender.connect("tcp://localhost:5557")
+    context = zmq.Context()
 
-while True:
-    print("Waiting for work from master...")
-    task = receiver.recv_json()
+    # Socket to receive messages on
+    receiver = context.socket(zmq.PULL)
+    receiver.connect("tcp://localhost:5556")
 
-    print("Received request: %s" % task)
+    # Socket to send messages to
+    sender = context.socket(zmq.PUSH)
+    sender.connect("tcp://localhost:5557")
 
-    # Do the work
-    task["result"] = "good"
-    time.sleep(1)
+    while True:
+        print("Waiting for work from master...")
+        task = receiver.recv_json()
 
-    # Send results to sink
-    print("Send response to master: %s" % task)
-    sender.send_json(task)
+        print("Received request: %s" % task)
+
+        # Do the work
+        task["result"] = "good"
+        time.sleep(1)
+
+        # Send results to sink
+        print("Send response to master: %s" % task)
+        sender.send_json(task)

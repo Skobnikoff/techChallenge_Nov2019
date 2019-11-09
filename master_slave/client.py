@@ -1,33 +1,36 @@
 import zmq
 import time
 
-# get input
-# TODO
 
-# init 0MQ context and define sockets
-context = zmq.Context()
-socket = context.socket(zmq.REQ)
-socket.connect("tcp://localhost:5555")
+if __name__ == '__main__':
 
-#  send request to master
-matrix_1 = [
-    [1, 2, 3],
-    [4, 5, 6]
-]
+    # get input
+    # TODO
 
-matrix_2 = [
-    [7, 8],
-    [9, 10],
-    [11, 12]
-]
+    # init 0MQ context and define sockets
+    context = zmq.Context()
+    socket = context.socket(zmq.REQ)
+    socket.connect("tcp://localhost:5555")
 
-input_data = {'matrix_1': matrix_1, 'matrix_2': matrix_2}
+    #  send request to master
+    matrix_1 = [
+        [1, 2, 3],
+        [4, 5, 6]
+    ]
 
-print("Send request: %s" % input_data)
-socket.send_json(input_data)
+    matrix_2 = [
+        [7, 8],
+        [9, 10],
+        [11, 12]
+    ]
 
-time.sleep(1)
+    input_data = {'matrix_1': matrix_1, 'matrix_2': matrix_2}
 
-#  wait for response from master
-response = socket.recv()
-print("Received response: %s" % response)
+    print("Send request: %s" % input_data)
+    socket.send_json(input_data)
+
+    time.sleep(1)
+
+    #  wait for response from master
+    response = socket.recv()
+    print("Received response: %s" % response)

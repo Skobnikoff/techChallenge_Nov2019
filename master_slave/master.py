@@ -11,47 +11,49 @@ def partition_work(matrix_1, matrix_2):
     return tasks
 
 
-context = zmq.Context()
+if __name__ == '__main__':
 
-# socket communicating with clients
-server = context.socket(zmq.REP)
-server.bind("tcp://*:5555")
+    context = zmq.Context()
 
-# socket pushing work to slaves
-sender = context.socket(zmq.PUSH)
-sender.bind("tcp://*:5556")
+    # socket communicating with clients
+    server = context.socket(zmq.REP)
+    server.bind("tcp://*:5555")
 
-# socket receiving results from slaves
-receiver = context.socket(zmq.PULL)
-receiver.bind("tcp://*:5557")
+    # socket pushing work to slaves
+    sender = context.socket(zmq.PUSH)
+    sender.bind("tcp://*:5556")
 
-while True:
-    #  wait for client request
-    print("Waiting for a request from client...")
+    # socket receiving results from slaves
+    receiver = context.socket(zmq.PULL)
+    receiver.bind("tcp://*:5557")
 
-    client_input_data = server.recv_json()
-    print("Received request: %s" % client_input_data)
+    while True:
+        #  wait for client request
+        print("Waiting for a request from client...")
 
-    #  partition work
-    tasks = partition_work(client_input_data["matrix_1"], client_input_data["matrix_2"])
+        client_input_data = server.recv_json()
+        print("Received request: %s" % client_input_data)
 
-    # send tasks to slaves
-    for task_id, task in tasks.items():
-        print("Send to slave task: {}".format(task_id))
-        sender.send_json(task)
-        task['status'] = 'sent'
+        #  partition work
+        tasks = partition_work(client_input_data["matrix_1"], client_input_data["matrix_2"])
 
-    # wait for responses from slaves
-    for index in range(len(tasks.keys())):
-        slave_response = receiver.recv_json()
-        print("Response from slave: {}".format(slave_response))
+        # send tasks to slaves
+        for task_id, task in tasks.items():
+            print("Send to slave task: {}".format(task_id))
+            sender.send_json(task)
+            task['status'] = 'sent'
 
-    # assemble results
-    # TODO
+        # wait for responses from slaves
+        for index in range(len(tasks.keys())):
+            slave_response = receiver.recv_json()
+            print("Response from slave: {}".format(slave_response))
 
-    time.sleep(1)
+        # assemble results
+        # TODO
 
-    #  send reply back to client
-    response = b"World"
-    print("Send response to client: %s" % response)
-    server.send(response)
+        time.sleep(1)
+
+        #  send reply back to client
+        response = b"World"
+        print("Send response to client: %s" % response)
+        server.send(response)
