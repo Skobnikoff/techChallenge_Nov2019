@@ -18,7 +18,7 @@ if __name__ == '__main__':
         print("Waiting for work from master...")
         task = receiver.recv_json()
 
-        print("Received request: %s" % task["task_id"])
+        print("Received request: {}".format(task["task_id"]))
 
         # multiply vectors
         matrix_1, matrix_2 = task["data"][0], task["data"][1]
@@ -29,5 +29,5 @@ if __name__ == '__main__':
         time.sleep(1)
 
         # Send results to master
-        print("Send response to master: %s" % task["task_id"])
+        print("Send response to master: {}".format(task["task_id"]))
         sender.send_json(message_to_master)

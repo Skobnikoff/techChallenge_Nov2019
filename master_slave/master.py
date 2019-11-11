@@ -37,7 +37,7 @@ if __name__ == '__main__':
         print("Waiting for a request from client...")
 
         client_input_data = server.recv_json()
-        print("Received request: %s" % client_input_data)
+        print("Received request: {}".format(client_input_data))
 
         #  partition work
         tasks = partition_work(client_input_data["matrix_1"], client_input_data["matrix_2"])
@@ -68,5 +68,5 @@ if __name__ == '__main__':
         time.sleep(1)
 
         #  send reply back to client
-        print("Send response to client: %s" % result_matrix)
+        print("Send response to client: {}".format(result_matrix))
         server.send_json(result_matrix)
