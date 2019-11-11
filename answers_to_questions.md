@@ -20,4 +20,31 @@ Knowing the nature of the data is useful in many ways: predictions, anomaly dete
 data simulation and so on.
 
 
+### When building models, explain the process, how you would go about measuring the accuracy and performance of your model?
+
+When I build models, the process looks as following:
+1) understand the problem and underlying ML solution: classification, regression, 
+    time series prediction, anomaly detection or clustering.
+2) explore the data: is it balanced? highly variable? Dense? etc
+3) define the limitations (depends on the step 1 et 2): interoperability of the model,
+    prediction speed, training speed, memory consumption, aversion of false positives, 
+    number of clusters or something else.
+4) define a measure of the model performance in accordance to its limitations 
+    and overall goal: 
+    - interoperability of the model (highly subjective and works only for basic models): 
+        number of trees, of tree leaves, of rules.
+    - prediction speed, training speed: time in seconds
+    - memory consumption: percentage of CPU/GPU or RAM consumed during the model execution,
+        disk space occupied
+    - the overall prediction accuracy: maximizing F1-score when the data is unbalanced, rarely basic accuracy (needs balanced dataset)
+    - aversion of false positives: maximizing recall
+    - aversion of false negatives: maximizing precision
+    - clustering: cluster purity or F-measure, many others can be used as well
+5) label the data (if supervised learning) 
+6) split the data on a train and test sets
+7) train the model on a train set, use the cross-validation
+8) validate the model with the validation set. If not satisfactory, try to understand why, go back to the previous steps
+9) delivery
+
+
 
