@@ -125,5 +125,46 @@ of the data.
 Code location: `master_slave/`
 
 **To test the code** do the following steps:
-1) make sure you have the Python language installed.
+1) make sure you have the Python language and ZeroMQ package installed.
 2) `cd techChallenge112019/master_slave`
+3) launch 2 slave and 1 master processes:
+`sh. run.sh`
+4) now when master and slaves are waiting for a request, run the client:
+    `python client.py`
+    
+    
+**How master_slave works?**
+
+This program is a simple implementation of a master-slave pattern for distributed
+computations. It uses a ZeroMQ library. 
+The program is specialized in multiplication of matrices.
+
+The whole process looks like this:
+1) Master process listens to requests from the Client.
+2) Slaves listen to orders from Master
+3) Client sends 2 matrices to the Master.
+4) Master decompose matrix multiplication in atomic independent tasks and send it
+to Slaves.
+5) Slaves execute vector multiplications and send results to the Master.
+6) Master compiles the final result and send it to the Client.
+7) Client get results and stops. Master and Slaves continue to run.
+
+
+**Shortcomings:** 
+* Master nor Slaves do not check the validity of the operation. Thus it may fail if
+Client sends invalid data (incompatible matrices, any number of matrices 
+different from 2, etc)
+* The matrix multiplication is all this distributed program does, it is not generic.
+* (!!!) Master does not track slaves and thus does not handle situations 
+    when a Slave fails or is unresponsive
+* (!!!) Slaves do not have the ability to listen for new messages from the master 
+    and work on previous instructions in parallel.
+* The program does not check if ports are available, thus it may fail if at least one
+    port is already occupied
+    
+
+**Further development:**
+* get rid of shortcomings (obviously!)
+* the data transfer may be realised via a shared data storage like HDFS or AWS S3.
+    This will improve the performance.
+* the code can be refactored and highly improved overall
