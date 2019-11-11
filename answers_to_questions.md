@@ -65,5 +65,15 @@ specifically good at such narrow tasks like price prediction, image classificati
 clients, converting speech to text and vice versa, and thousand of other use cases.
 
 
+### What is the difference between Dynamic Typing and Static Typing?
+Data Typing is feature of a programming language that defines how the data is stored and accessed during the runtime.
+
+Dynamic typing lets you do exactly that: a variable does not have any data type until it is assigned with some data 
+(e.g string). Later it can be reassigned with another type of data (e.g. float). Python is a language with the dynamic
+typing.
+
+By contrast, Static typing lets use one variable only for one data type during the whole runtime. The program throws an
+error if a variable of one type is attempted to be assigned with another type (e.g. an array is assigned with a hashmap).
+Go language is an example of statically typed language.
 
 
