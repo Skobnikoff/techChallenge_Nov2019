@@ -7,7 +7,7 @@ class ShuffledData:
     def __read_csv(self, file_path):
         table = []
         with open(file_path, 'r') as file:
-            reader = csv.reader(file)
+            reader = csv.reader(file, delimiter=',')
             for line in reader:
                 table.append(line)
         return table
@@ -64,13 +64,25 @@ class ShuffledData:
         self.table = self.__unshuffle_1d(self.__horizon_shuffle_lst, self.table)
 
 
+def write_csv(data, file_path):
+    with open(file_path, 'w') as file:
+        writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for line in data:
+            writer.writerow(line)
+
+
 if __name__ == '__main__':
 
     file_path = sys.argv[1]
 
     file = ShuffledData(file_path)
-    print(file.table)
+
     file.shuffle()
-    print(file.table)
+    out_file_path = file_path.split('.csv')[0] + "_shuffled.csv"
+    write_csv(data=file.table, file_path=out_file_path)
+    print("Shuffled file: {}".format(out_file_path))
+
     file.unshuffle()
-    print(file.table)
+    out_file_path = file_path.split('.csv')[0] + "_unshuffled.csv"
+    write_csv(data=file.table, file_path=out_file_path)
+    print("Unshuffled file: {}".format(out_file_path))
