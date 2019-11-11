@@ -4,10 +4,15 @@ import zmq
 
 def partition_work(matrix_1, matrix_2):
     tasks = {}
+    matrix_2_transposed = list(map(list, zip(*matrix_2)))
     for row_index, row_matrix_1 in enumerate(matrix_1):
-        for col_index, col_matrix_2 in enumerate(matrix_2):
-            task = {"data": (row_matrix_1, col_matrix_2), "indexes": (row_index, col_index), "status": "todo"}
-            tasks['{}_{}'.format(*task["indexes"])] = task
+        for col_index, col_matrix_2 in enumerate(matrix_2_transposed):
+            task = {"data": (row_matrix_1, col_matrix_2),
+                    "indexes": (row_index, col_index),
+                    "status": "todo",
+                    "task_id": '{}_{}'.format(row_index, col_index)
+                    }
+            tasks[task["task_id"]] = task
     return tasks
 
 
