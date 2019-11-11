@@ -34,25 +34,26 @@ if __name__ == '__main__':
 
     while True:
         #  wait for client request
-        print("Waiting for a request from client...")
+        print("MASTER: Waiting for a request from client...")
 
         client_input_data = server.recv_json()
-        print("Received request: {}".format(client_input_data))
+        print("MASTER: Received request from Client: {}".format(client_input_data))
 
         #  partition work
         tasks = partition_work(client_input_data["matrix_1"], client_input_data["matrix_2"])
 
         # send tasks to slaves
         for task_id, task in tasks.items():
-            print("Send to slave task: {}".format(task_id))
             sender.send_json(task)
+            print("MASTER: Sent to slaves task: {}".format(task_id))
             task['status'] = 'sent'
 
         # wait for responses from slaves
         for index in range(len(tasks.keys())):
             slave_response = receiver.recv_json()
             task_id = slave_response["task_id"]
-            print("Got results for the task #{}".format(task_id))
+            slave_id = slave_response["slave_id"]
+            print("MASTER: Got results from Slave {} for the task {}".format(slave_id, task_id))
             tasks[task_id]["result"] = slave_response["result"]
 
         # assemble results
@@ -68,5 +69,5 @@ if __name__ == '__main__':
         time.sleep(1)
 
         #  send reply back to client
-        print("Send response to client: {}".format(result_matrix))
         server.send_json(result_matrix)
+        print("MASTER: Sent response to Client: {}".format(result_matrix))

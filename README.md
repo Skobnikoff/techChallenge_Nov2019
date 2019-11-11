@@ -118,3 +118,12 @@ unexploitable by anybody except the data owner, we can do a step further and
 encrypt the shuffled data.
 * performance may be improved by using numpy arrays and getting rid of transposition
 of the data.
+
+
+## Ex 3: (Python) Distributed Computing: Master Slave Pattern
+
+Code location: `master_slave/`
+
+**To test the code** do the following steps:
+1) make sure you have the Python language installed.
+2) `cd techChallenge112019/master_slave`

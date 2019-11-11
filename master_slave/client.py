@@ -24,11 +24,11 @@ if __name__ == '__main__':
     socket.connect("tcp://localhost:5555")
 
     #  send request to master
-    print("Send request: {}".format(input_data))
     socket.send_json(input_data)
+    print("CLIENT: Sent request to Master: {}".format(input_data))
 
     time.sleep(1)
 
     #  wait for response from master
     response = socket.recv_json()
-    print("Received response: {}".format(response))
+    print("CLIENT: Received response from Master: {}".format(response))
