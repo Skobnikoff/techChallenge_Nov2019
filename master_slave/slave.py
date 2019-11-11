@@ -20,11 +20,14 @@ if __name__ == '__main__':
 
         print("Received request: %s" % task["task_id"])
 
-        # multiply matrices
+        # multiply vectors
         matrix_1, matrix_2 = task["data"][0], task["data"][1]
-        task["result"] = sum(map(lambda x: x[0]*x[1], zip(matrix_1, matrix_2)))
+        message_to_master = {
+            "task_id": task["task_id"],
+            "result": sum(map(lambda x: x[0]*x[1], zip(matrix_1, matrix_2)))
+        }
         time.sleep(1)
 
-        # Send results to sink
-        print("Send response to master: %s" % task)
-        sender.send_json(task)
+        # Send results to master
+        print("Send response to master: %s" % task["task_id"])
+        sender.send_json(message_to_master)

@@ -32,5 +32,5 @@ if __name__ == '__main__':
     time.sleep(1)
 
     #  wait for response from master
-    response = socket.recv()
+    response = socket.recv_json()
     print("Received response: %s" % response)

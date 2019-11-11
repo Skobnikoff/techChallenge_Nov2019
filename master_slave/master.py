@@ -51,14 +51,22 @@ if __name__ == '__main__':
         # wait for responses from slaves
         for index in range(len(tasks.keys())):
             slave_response = receiver.recv_json()
-            print("Response from slave: {}".format(slave_response))
+            task_id = slave_response["task_id"]
+            print("Got results for the task #{}".format(task_id))
+            tasks[task_id]["result"] = slave_response["result"]
 
         # assemble results
-        # TODO
+        result_matrix = []
+        matrix_shape = len(client_input_data["matrix_1"])
+        for row_index in range(matrix_shape):
+            result_matrix.append([0]*matrix_shape)
+
+        for task in tasks.values():
+            row_index, col_index = task["indexes"]
+            result_matrix[row_index][col_index] = task["result"]
 
         time.sleep(1)
 
         #  send reply back to client
-        response = b"World"
-        print("Send response to client: %s" % response)
-        server.send(response)
+        print("Send response to client: %s" % result_matrix)
+        server.send_json(result_matrix)
