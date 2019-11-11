@@ -47,4 +47,23 @@ When I build models, the process looks as following:
 9) delivery
 
 
+### What is the difference between Machine Learning and Artificial Intelligence?
+
+Artificial intelligence does not have a single definition. It is a broad field of a scientific research aiming to 
+increasingly improve the overall intelligence of computers and machines. The intelligence manifests in autonomy of 
+taking decisions, high adaptability to the new environment, ability to learn, reason and create.
+
+Artificial intelligence relies on a mix of other sciences: neuroscience, cognitive science, psychology, statistics, 
+math, computer science, optics, mechanics, biology, linguistics and others.
+
+Machine learning is an important part of artificial intelligence which deals with learning from experience.
+Experience means data. ML has an algorithmic toolset, it leverages methods from statistics, calculus, graph theory,
+computer science. 
+
+Machine learning in contrast to artificial intelligence does not aim to make a machine generally intelligent but
+specifically good at such narrow tasks like price prediction, image classification, anomaly detection, clustering
+clients, converting speech to text and vice versa, and thousand of other use cases.
+
+
+
 
