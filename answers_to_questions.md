@@ -77,3 +77,12 @@ error if a variable of one type is attempted to be assigned with another type (e
 Go language is an example of statically typed language.
 
 
+### What is more important, Clean data or More data?
+Clean data is not a binary measure. Depending on a use case there are certain "red lines" beyond which the data becomes
+unexploitable, no matter how big it is. In a general setting, cleaner is data, less processing it needs, less risks has
+the whole project.
+
+On the other hand, more data often means more chances to have a sample of clean data that can be used for 
+some analysis. More data also means less assumptions and more reliable results of the analysis.
+
+Thus as far as the dirtiness of the data can be compensated by additional processing, more data is better.
