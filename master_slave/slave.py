@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
     # Socket to receive messages on
     receiver = context.socket(zmq.PULL)
-    receiver.bind("tcp://*:5556")
+    receiver.connect("tcp://localhost:5556")
 
     # Socket to send messages to
     sender = context.socket(zmq.PUSH)
