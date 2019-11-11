@@ -10,15 +10,15 @@ import (
 
 // ASSUMPTIONS:
 // - each line of the input file contains the same number of fields, thus the same number of separator symbols
-// - portions of text wrapped in quotation marks and brakets are considered as such
+// - portions of text wrapped in quotation marks and brackets are considered as such
 //   that do not contain the separator inside
 // - only punctuation symbols and tabs are considered as valid separators,
 // 	 alphanumerical separators are not allowed
 // - only double quote `"` is considered as a valid quotation mark
 // - files which EOL is not "\n" can still be handled but there are risks of bugs
 
-// NbLn is a number of lines to be read in the beggining of the input file
-// 20 is big enough to be confident that there is no multiple characters competing for the "Delimeter status"
+// NbLn is a number of lines to be read in the beginning of the input file
+// 20 is big enough to be confident that there is no multiple characters competing for the "Delimiter status"
 var NbLn int = 20
 
 func main() {
@@ -51,7 +51,7 @@ func main() {
 		}
 	}
 
-	// remove text in quotes and brakets
+	// remove text in quotes and brackets
 	regQuote := regexp.MustCompile(`"[^"\r\n]*"`)
 	regBraket1 := regexp.MustCompile(`\([^\r\n]*\)`)
 	regBraket2 := regexp.MustCompile(`\[[^\r\n]*\]`)
@@ -75,8 +75,8 @@ func main() {
 	}
 
 	// count character frequencies
-	var charCountPerLine []map[string]int    // nb of char occurences in each line
-	lineCountPerChar := make(map[string]int) // nb of char occurences across all the lines
+	var charCountPerLine []map[string]int    // nb of char occurrences in each line
+	lineCountPerChar := make(map[string]int) // nb of char occurrences across all the lines
 	for _, chars := range punctuation {
 		charCount := make(map[string]int)
 		for _, v := range chars {
