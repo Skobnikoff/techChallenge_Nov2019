@@ -72,7 +72,6 @@ func main() {
 		if len(thisPunctuation) > 0 {
 			punctuation = append(punctuation, thisPunctuation)
 		}
-
 	}
 
 	// count character frequencies
@@ -119,14 +118,14 @@ func main() {
 			}
 		}
 
-		fmt.Printf("The input file has `%s` as a separator (high confidence).\n", fileSep)
+		fmt.Printf("The input file has `%s` as a separator.\n", fileSep)
 
 	} else if len(potentSep) == 1 {
 		var fileSep string
 		for fileSep = range potentSep {
 			break
 		}
-		fmt.Printf("The input file has `%s` as a separator (high confidence).\n", fileSep)
+		fmt.Printf("The input file has `%s` as a separator.\n", fileSep)
 
 	} else {
 		fmt.Printf("The input file separator was not identified.\n")
