@@ -1,4 +1,3 @@
-# import sys
 import time
 import zmq
 
@@ -19,10 +18,11 @@ if __name__ == '__main__':
         print("Waiting for work from master...")
         task = receiver.recv_json()
 
-        print("Received request: %s" % task)
+        print("Received request: %s" % task["task_id"])
 
-        # Do the work
-        task["result"] = "good"
+        # multiply matrices
+        matrix_1, matrix_2 = task["data"][0], task["data"][1]
+        task["result"] = sum(map(lambda x: x[0]*x[1], zip(matrix_1, matrix_2)))
         time.sleep(1)
 
         # Send results to sink
